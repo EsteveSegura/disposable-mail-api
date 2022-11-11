@@ -16,6 +16,10 @@ class TemporalMailService {
 
       return response.data;
     } catch (err) {
+      // eslint-disable-next-line max-len
+      if (err.response.data['hydra:description'].startsWith('address: The username') && err.response.data['hydra:description'].endsWith('is not valid.')) {
+        throw new InvalidMailCreationError('This username is already taken by other user');
+      }
       throw new InvalidMailCreationError('Cant create new mail.');
     }
   }

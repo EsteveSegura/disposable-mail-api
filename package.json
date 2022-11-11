@@ -1,6 +1,6 @@
 {
   "name": "disposable-mail-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generate multiple disposable mails",
   "main": "./src/index.js",
   "scripts": {
