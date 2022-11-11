@@ -6,7 +6,7 @@ const mail = new DisposableMail();
   console.log('createMail', createMail);
 
   setInterval(async () => {
-    const getInboxMail = await mail.inbox({mail: null});
+    const getInboxMail = await mail.inbox();
     console.log('getInboxMail', getInboxMail);
   }, 7000);
 })();
