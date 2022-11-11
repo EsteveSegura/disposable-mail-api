@@ -4,7 +4,8 @@
   "description": "Generate multiple disposable mails",
   "main": "./src/index.js",
   "scripts": {
-    "test": "npm run test",
+    "pretest": "eslint .",
+    "test": "jest --silent --testPathPattern=/test/ --passWithNoTests",
     "lint": "eslint ."
   },
   "repository": {

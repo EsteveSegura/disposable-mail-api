@@ -1,13 +1,11 @@
-const axios = require('axios');
+const InvalidMailCreationError = require('../errors/InvalidMailCreationError');
+const InvalidMailInboxRetreiveError = require('../errors/InvalidMailInboxRetreiveError');
+const InvalidMailCredentialsError = require('../errors/InvalidMailCredentialsError');
 
-const InvalidMailCreationError = require("../errors/InvalidMailCreationError");
-const InvalidMailInboxRetreiveError = require("../errors/InvalidMailInboxRetreiveError");
-const InvalidMailCredentialsError = require("../errors/InvalidMailCredentialsError");
-
-class TemporalMailService{
+class TemporalMailService {
   constructor() {
     this.BASE_API_URL = 'https://api.mail.tm';
-    this.httpClient = axios;
+    this.httpClient = require('axios');
   }
   async createMail({mail, password}) {
     try {
@@ -18,7 +16,7 @@ class TemporalMailService{
 
       return response.data;
     } catch (err) {
-      throw new InvalidMailCreationError('Cant create new mail.')
+      throw new InvalidMailCreationError('Cant create new mail.');
     }
   }
 
@@ -33,7 +31,6 @@ class TemporalMailService{
 
       return response.data;
     } catch (err) {
-      console.log()
       throw new InvalidMailInboxRetreiveError('Cant get the inbox.');
     }
   }

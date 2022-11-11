@@ -1,8 +1,9 @@
-const apiMailService = require('../service/tempMailApi');
 const {randomString} = require('../utils/randomString');
 
 class DisposableMail {
-  constructor() {
+  constructor(apiMailService) {
+    this.apiMailService = apiMailService || require('../service/tempMailApi');
+
     this.mail = null;
     this.password = null;
   }
@@ -20,21 +21,21 @@ class DisposableMail {
       this.password = randomString({length: 25});
     }
 
-    const createdMail = await apiMailService.createMail({
+    const createdMail = await this.apiMailService.createMail({
       mail: this.mail,
-      password: this.password
+      password: this.password,
     });
 
     // TODO: Move return to ValueObject
     return {
-      addres: createdMail.address,
+      address: createdMail.address,
     };
   }
 
   async inbox() {
-    const inbox = await apiMailService.getMailInbox({
+    const inbox = await this.apiMailService.getMailInbox({
       mail: this.mail,
-      password: this.password
+      password: this.password,
     });
 
     // TODO: Move return to ValueObject
