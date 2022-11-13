@@ -8,14 +8,15 @@ class DisposableMail {
     this.apiMailService = apiMailService || require('../service/tempMailApi');
 
     this.mail = null;
+    this.username = null;
     this.password = null;
   }
 
-  async generate({mail = null, password = null}) {
-    this.mail = mail;
+  async generate({username = null, password = null}) {
+    this.username = username;
 
-    if (!this.mail) {
-      this.mail = randomString({length: 15});
+    if (!this.username) {
+      this.username = randomString({length: 15});
     }
 
     this.password = password;
@@ -25,7 +26,7 @@ class DisposableMail {
     }
 
     const createdMail = await this.apiMailService.createMail({
-      mail: this.mail,
+      username: this.username,
       password: this.password,
     });
 
