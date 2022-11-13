@@ -1,5 +1,8 @@
 const {randomString} = require('../utils/randomString');
 
+const InboxResponse = require('../responses/InboxResponse');
+const GenerateResponse = require('../responses/GenerateResponse');
+
 class DisposableMail {
   constructor(apiMailService) {
     this.apiMailService = apiMailService || require('../service/tempMailApi');
@@ -26,10 +29,8 @@ class DisposableMail {
       password: this.password,
     });
 
-    // TODO: Move return to ValueObject
-    return {
-      address: createdMail.address,
-    };
+    const response = new GenerateResponse({address: createdMail.address});
+    return response;
   }
 
   async inbox() {
@@ -38,15 +39,9 @@ class DisposableMail {
       password: this.password,
     });
 
-    // TODO: Move return to ValueObject
-    return {
-      mailInbox: inbox['hydra:member'].map((mail) => ({
-        from: mail.from,
-        subject: mail.subject,
-        intro: mail.intro,
-      })),
-    };
-  }
+    const response = new InboxResponse({inbox: inbox['hydra:member']});
+    return response;
+  };
 }
 
 module.exports = DisposableMail;
