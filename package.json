@@ -1,8 +1,11 @@
 {
   "name": "disposable-mail-api",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Generate multiple disposable mails",
   "main": "./src/index.js",
+  "bin": {
+    "diposable-mail-api": "./bin/cli.js"
+  },
   "scripts": {
     "pretest": "eslint .",
     "test": "jest --testPathPattern=/test/ --passWithNoTests",
@@ -46,7 +49,9 @@
   },
   "homepage": "https://github.com/EsteveSegura/disposable-mail-api#readme",
   "dependencies": {
-    "axios": "^0.27.2"
+    "axios": "^0.27.2",
+    "figlet": "^1.5.2",
+    "yargs": "^17.6.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-throw-expressions": "^7.16.7",
