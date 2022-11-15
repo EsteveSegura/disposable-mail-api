@@ -23,3 +23,31 @@ const mail = new DisposableMail();
   const getInboxMail = await mail.inbox(); // => mailInbox: [{from: [{address: 'SomeEmail@SomeDomain.com', name: 'John Doe'}], intro: 'Mail content!', subject: 'important mail'}]
 })();
 ```
+
+### CLI Usage
+Install disposable-mail-api in global context
+```bash
+npm i -g disposable-mail-api
+```
+
+And then you can run:
+
+```bash
+disposable-mail-api -u myrandomusername
+```
+
+This will show an interface in which you can receive mails without this need of code, something like this:
+
+```plaintext
+Mail created => myrandomusername@karenkey.com
+Listening for mails...
+
+---------------------------- NEW MAIL ----------------------------
+>> From: John Doe <JohnDoe@example.net>
+>> Subject: Testing mail server.
+>> Body: Awesome mail system.
+---------------------------- NEW MAIL ----------------------------
+>> From: Not Jonh Doe <NotJohnDoe@voicemod.net>
+>> Subject: Not John Doe speaking!
+>> Body: You know.... im not John Doe, im Jonh Doe!
+```
