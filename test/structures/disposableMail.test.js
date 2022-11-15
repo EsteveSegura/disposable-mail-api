@@ -2,10 +2,10 @@ const DisposableMailTest = require('../../src/structures/disposableMail');
 
 
 describe('DisposableMail', () => {
-  let httpClientMock = null;
+  let apiMailServiceMock = null;
 
   beforeEach(() => {
-    httpClientMock = {
+    apiMailServiceMock = {
       createMail: jest.fn(),
       getMailInbox: jest.fn(),
     };
@@ -17,20 +17,20 @@ describe('DisposableMail', () => {
   });
 
   it('should create email with specific address and password', async () => {
-    const disposableMailInstance = new DisposableMailTest(httpClientMock);
-    httpClientMock.createMail.mockReturnValue({address: 'supermail@kerenkey.com'});
+    const disposableMailInstance = new DisposableMailTest(apiMailServiceMock);
+    apiMailServiceMock.createMail.mockReturnValue({address: 'supermail@kerenkey.com'});
 
-    const createdMail = await disposableMailInstance.generate({mail: 'supermail', password: 'guardiasregladas'});
+    const createdMail = await disposableMailInstance.generate({username: 'supermail', password: 'guardiasregladas'});
 
-    expect(httpClientMock.createMail).toHaveBeenCalledTimes(1);
-    expect(httpClientMock.createMail).toHaveBeenCalledWith({mail: 'supermail', password: 'guardiasregladas'});
+    expect(apiMailServiceMock.createMail).toHaveBeenCalledTimes(1);
+    expect(apiMailServiceMock.createMail).toHaveBeenCalledWith({username: 'supermail', password: 'guardiasregladas'});
     expect(createdMail).toEqual({address: 'supermail@kerenkey.com'});
   });
 
   it('should read email inbox with specific address and password', async () => {
-    const disposableMailInstance = new DisposableMailTest(httpClientMock);
-    httpClientMock.createMail.mockReturnValue({address: 'supermail@kerenkey.com'});
-    httpClientMock.getMailInbox.mockReturnValue({
+    const disposableMailInstance = new DisposableMailTest(apiMailServiceMock);
+    apiMailServiceMock.createMail.mockReturnValue({address: 'supermail@kerenkey.com'});
+    apiMailServiceMock.getMailInbox.mockReturnValue({
       'hydra:member': [
         {
           from: [{
@@ -43,13 +43,14 @@ describe('DisposableMail', () => {
       ],
     });
 
-    const createdMail = await disposableMailInstance.generate({mail: 'supermail', password: 'guardiasregladas'});
+    const createdMail = await disposableMailInstance.generate({username: 'supermail', password: 'guardiasregladas'});
     const inboxMail = await disposableMailInstance.inbox();
 
-    expect(httpClientMock.createMail).toHaveBeenCalledTimes(1);
-    expect(httpClientMock.createMail).toHaveBeenCalledWith({mail: 'supermail', password: 'guardiasregladas'});
-    expect(httpClientMock.getMailInbox).toHaveBeenCalledTimes(1);
-    expect(httpClientMock.getMailInbox).toHaveBeenCalledWith({mail: 'supermail', password: 'guardiasregladas'});
+    expect(apiMailServiceMock.createMail).toHaveBeenCalledTimes(1);
+    expect(apiMailServiceMock.createMail).toHaveBeenCalledWith({username: 'supermail', password: 'guardiasregladas'});
+    expect(apiMailServiceMock.getMailInbox).toHaveBeenCalledTimes(1);
+    expect(apiMailServiceMock.getMailInbox).
+        toHaveBeenCalledWith({mail: 'supermail@kerenkey.com', password: 'guardiasregladas'});
     expect(createdMail).toEqual({address: 'supermail@kerenkey.com'});
     expect(inboxMail).toEqual({
       mailInbox: [
