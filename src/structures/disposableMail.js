@@ -30,6 +30,8 @@ class DisposableMail {
       password: this.password,
     });
 
+    this.mail = createdMail.address;
+
     const response = new GenerateResponse({address: createdMail.address});
     return response;
   }

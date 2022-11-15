@@ -4,7 +4,7 @@ const InvalidMailCredentialsError = require('../errors/InvalidMailCredentialsErr
 const InvalidDomainEmailRetireveError = require('../errors/InvalidDomainEmailRetrieveError');
 
 class TemporalMailService {
-  constructor(httpClient) {
+  constructor() {
     this.BASE_API_URL = 'https://api.mail.tm';
     this.httpClient = require('axios');
   }
