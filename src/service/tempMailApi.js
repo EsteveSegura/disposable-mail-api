@@ -22,8 +22,8 @@ class TemporalMailService {
 
       return response.data;
     } catch (err) {
-      if (err.response.data['hydra:description'].startsWith('address: The username') &&
-      err.response.data['hydra:description'].endsWith('is not valid.')) {
+      if (err.response && err.response.data['hydra:description'].startsWith('address: This value') &&
+      err.response.data['hydra:description'].endsWith('is already used.')) {
         throw new InvalidMailCreationError('This username is already taken by other user');
       }
 

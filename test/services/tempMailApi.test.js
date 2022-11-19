@@ -1,6 +1,7 @@
 const tempMailTest = require('../../src/service/tempMailApi');
 const axios = require('axios');
 const InvalidMailInboxRetreiveError = require('../../src/errors/InvalidMailInboxRetreiveError');
+const InvalidMailCreationError = require('../../src/errors/InvalidMailCreationError');
 jest.mock('axios');
 
 describe('TempMail', () => {
@@ -34,6 +35,77 @@ describe('TempMail', () => {
         address: 'enElSiguientePr@patata.net',
         password: '1111',
       });
+    });
+
+    it('should throw err if domain is null or cannot retrieve it', async () => {
+      axios.get.mockRejectedValueOnce(new Error());
+      try {
+        await tempMailTest.createMail({username: 'enElSiguientePr', password: '1111'});
+      } catch (error) {
+        expect(axios.get).toHaveBeenCalledTimes(1);
+        expect(axios.get).toHaveBeenCalledWith('https://api.mail.tm/domains');
+
+        expect(error).toBeInstanceOf(InvalidMailCreationError);
+        expect(error.message).toEqual('Cant create new mail.');
+      }
+    });
+
+
+    it('should throw err if domain/username or credetials are not valid', async () => {
+      axios.get
+          .mockReturnValueOnce({
+            data: {
+              'hydra:member': [{domain: 'patata.net'}],
+            },
+          });
+
+      axios.post.mockRejectedValueOnce(new Error());
+      try {
+        await tempMailTest.createMail({username: 'enElSiguientePr', password: '1111'});
+      } catch (error) {
+        expect(axios.get).toHaveBeenCalledTimes(1);
+        expect(axios.get).toHaveBeenCalledWith('https://api.mail.tm/domains');
+        expect(axios.post).toHaveBeenCalledTimes(1);
+        expect(axios.post).toHaveBeenCalledWith('https://api.mail.tm/accounts', {
+          address: 'enElSiguientePr@patata.net',
+          password: '1111',
+        });
+        expect(error).toBeInstanceOf(InvalidMailCreationError);
+        expect(error.message).toEqual('Cant create new mail.');
+      }
+    });
+
+    it('should throw err if username is already on use', async () => {
+      axios.get
+          .mockReturnValueOnce({
+            data: {
+              'hydra:member': [{domain: 'patata.net'}],
+              'hydra:description': {'address': 'The username PaquitoEstaPR is not valid'},
+            },
+          });
+
+      axios.post.mockRejectedValueOnce({
+        response: {
+          data:
+          {
+            'hydra:description': 'address: This value is already used.',
+          },
+        },
+      });
+
+      try {
+        await tempMailTest.createMail({username: 'PaquitoEstaPR', password: '1111'});
+      } catch (error) {
+        expect(axios.get).toHaveBeenCalledTimes(1);
+        expect(axios.get).toHaveBeenCalledWith('https://api.mail.tm/domains');
+        expect(axios.post).toHaveBeenCalledTimes(1);
+        expect(axios.post).toHaveBeenCalledWith('https://api.mail.tm/accounts', {
+          address: 'PaquitoEstaPR@patata.net',
+          password: '1111',
+        });
+        expect(error).toBeInstanceOf(InvalidMailCreationError);
+        expect(error.message).toEqual('This username is already taken by other user');
+      }
     });
 
 
