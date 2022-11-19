@@ -1,7 +1,7 @@
 const InvalidMailCreationError = require('../errors/InvalidMailCreationError');
 const InvalidMailInboxRetreiveError = require('../errors/InvalidMailInboxRetreiveError');
 const InvalidMailCredentialsError = require('../errors/InvalidMailCredentialsError');
-const InvalidDomainEmailRetireveError = require('../errors/InvalidDomainEmailRetrieveError');
+const InvalidDomainEmailRetreiveError = require('../errors/InvalidDomainEmailRetrieveError');
 
 class TemporalMailService {
   constructor() {
@@ -13,6 +13,7 @@ class TemporalMailService {
     try {
       const responseDomain = await this._getDomain();
       const domain = responseDomain['hydra:member'][0].domain;
+
 
       const response = await this.httpClient.post(`${this.BASE_API_URL}/accounts`, {
         address: `${username}@${domain}`,
@@ -63,7 +64,7 @@ class TemporalMailService {
       const response = await this.httpClient.get(`${this.BASE_API_URL}/domains`);
       return response.data;
     } catch (err) {
-      throw new InvalidDomainEmailRetireveError('Cant retrieve domain for emails');
+      throw new InvalidDomainEmailRetreiveError('Cant retrieve domain for emails');
     }
   }
 }

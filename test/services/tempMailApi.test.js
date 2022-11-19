@@ -1,5 +1,6 @@
 const tempMailTest = require('../../src/service/tempMailApi');
 const axios = require('axios');
+const InvalidMailInboxRetreiveError = require('../../src/errors/InvalidMailInboxRetreiveError');
 jest.mock('axios');
 
 describe('TempMail', () => {
@@ -35,6 +36,7 @@ describe('TempMail', () => {
       });
     });
 
+
     it('should retreive new mail inbox', async () => {
       axios.post
           .mockReturnValueOnce({
@@ -60,6 +62,56 @@ describe('TempMail', () => {
         address: 'enElSiguientePr@patata.net',
         password: '1111',
       });
+    });
+
+
+    it('should throw err if cant retrieve email inbox if mail and password are incorrect', async () => {
+      axios.post.mockRejectedValueOnce(new Error());
+
+
+      try {
+        await tempMailTest.getMailInbox({mail: 'enElSiguientePr@patata.net', password: '1111'});
+      } catch (error) {
+        expect(axios.post).toHaveBeenCalledTimes(1);
+        expect(axios.get).toHaveBeenCalledTimes(0);
+        expect(axios.post).toHaveBeenCalledWith('https://api.mail.tm/token', {
+          address: 'enElSiguientePr@patata.net',
+          password: '1111',
+        });
+        expect(error).toBeInstanceOf(InvalidMailInboxRetreiveError);
+        expect(error.message).toEqual('Cant get the inbox.');
+      }
+    });
+
+    it('should throw err if token is not valid', async () => {
+      axios.post
+          .mockReturnValueOnce({
+            data: {
+              token: 'GOAL',
+            },
+          });
+
+      axios.get.mockRejectedValueOnce(new Error());
+
+
+      try {
+        await tempMailTest.getMailInbox({mail: 'enElSiguientePr@patata.net', password: '1111'});
+      } catch (error) {
+        expect(axios.post).toHaveBeenCalledTimes(1);
+        expect(axios.post).toHaveBeenCalledWith('https://api.mail.tm/token', {
+          address: 'enElSiguientePr@patata.net',
+          password: '1111',
+        });
+        expect(axios.get).toHaveBeenCalledTimes(1);
+        expect(axios.get).toHaveBeenCalledWith('https://api.mail.tm/messages', {
+          headers: {
+            authorization: 'Bearer GOAL',
+          },
+        });
+
+        expect(error).toBeInstanceOf(InvalidMailInboxRetreiveError);
+        expect(error.message).toEqual('Cant get the inbox.');
+      }
     });
   });
 });
