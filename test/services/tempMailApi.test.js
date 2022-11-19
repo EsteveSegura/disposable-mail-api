@@ -155,7 +155,7 @@ describe('TempMail', () => {
       }
     });
 
-    it('should throw err if token is not valid', async () => {
+    it('should throw err if token is not valid when gettingMailInbox', async () => {
       axios.post
           .mockReturnValueOnce({
             data: {
@@ -163,7 +163,7 @@ describe('TempMail', () => {
             },
           });
 
-      axios.get.mockRejectedValueOnce(new Error());
+      axios.post.mockRejectedValueOnce(new Error());
 
 
       try {
