@@ -163,7 +163,7 @@ describe('TempMail', () => {
             },
           });
 
-      axios.post.mockRejectedValueOnce(new Error());
+      axios.get.mockRejectedValueOnce(new Error());
 
 
       try {
