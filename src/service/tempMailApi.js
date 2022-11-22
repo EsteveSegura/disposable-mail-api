@@ -1,7 +1,7 @@
 const InvalidMailCreationError = require('../errors/InvalidMailCreationError');
 const InvalidMailInboxRetreiveError = require('../errors/InvalidMailInboxRetreiveError');
 const InvalidMailCredentialsError = require('../errors/InvalidMailCredentialsError');
-const InvalidDomainEmailRetireveError = require('../errors/InvalidDomainEmailRetrieveError');
+const InvalidDomainEmailRetreiveError = require('../errors/InvalidDomainEmailRetrieveError');
 
 class TemporalMailService {
   constructor() {
@@ -14,6 +14,7 @@ class TemporalMailService {
       const responseDomain = await this._getDomain();
       const domain = responseDomain['hydra:member'][0].domain;
 
+
       const response = await this.httpClient.post(`${this.BASE_API_URL}/accounts`, {
         address: `${username}@${domain}`,
         password,
@@ -21,8 +22,8 @@ class TemporalMailService {
 
       return response.data;
     } catch (err) {
-      if (err.response.data['hydra:description'].startsWith('address: The username') &&
-      err.response.data['hydra:description'].endsWith('is not valid.')) {
+      if (err.response && err.response.data['hydra:description'].startsWith('address: This value') &&
+      err.response.data['hydra:description'].endsWith('is already used.')) {
         throw new InvalidMailCreationError('This username is already taken by other user');
       }
 
@@ -63,7 +64,7 @@ class TemporalMailService {
       const response = await this.httpClient.get(`${this.BASE_API_URL}/domains`);
       return response.data;
     } catch (err) {
-      throw new InvalidDomainEmailRetireveError('Cant retrieve domain for emails');
+      throw new InvalidDomainEmailRetreiveError('Cant retrieve domain for emails');
     }
   }
 }
