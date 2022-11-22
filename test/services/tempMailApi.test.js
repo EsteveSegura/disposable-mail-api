@@ -16,13 +16,13 @@ describe('TempMail', () => {
   describe('tempMailApi', () => {
     it('should create new mail inbox', async () => {
       axios.get
-          .mockReturnValueOnce({
+          .mockReturnValue({
             data: {
               'hydra:member': [{domain: 'patata.net'}],
             },
           });
       axios.post
-          .mockReturnValueOnce({
+          .mockReturnValue({
             data: {},
           });
 
@@ -38,7 +38,7 @@ describe('TempMail', () => {
     });
 
     it('should throw err if domain is null or cannot retrieve it', async () => {
-      axios.get.mockRejectedValueOnce(new Error());
+      axios.get.mockRejectedValue(new Error());
       try {
         await tempMailTest.createMail({username: 'enElSiguientePr', password: '1111'});
       } catch (error) {
@@ -53,13 +53,13 @@ describe('TempMail', () => {
 
     it('should throw err if domain/username or credetials are not valid', async () => {
       axios.get
-          .mockReturnValueOnce({
+          .mockReturnValue({
             data: {
               'hydra:member': [{domain: 'patata.net'}],
             },
           });
 
-      axios.post.mockRejectedValueOnce(new Error());
+      axios.post.mockRejectedValue(new Error());
       try {
         await tempMailTest.createMail({username: 'enElSiguientePr', password: '1111'});
       } catch (error) {
@@ -77,14 +77,14 @@ describe('TempMail', () => {
 
     it('should throw err if username is already on use', async () => {
       axios.get
-          .mockReturnValueOnce({
+          .mockReturnValue({
             data: {
               'hydra:member': [{domain: 'patata.net'}],
               'hydra:description': {'address': 'The username PaquitoEstaPR is not valid'},
             },
           });
 
-      axios.post.mockRejectedValueOnce({
+      axios.post.mockRejectedValue({
         response: {
           data:
           {
@@ -111,13 +111,13 @@ describe('TempMail', () => {
 
     it('should retreive new mail inbox', async () => {
       axios.post
-          .mockReturnValueOnce({
+          .mockReturnValue({
             data: {
               token: 'GOAL',
             },
           });
       axios.get
-          .mockReturnValueOnce({
+          .mockReturnValue({
             data: {something: 'beacause im and object in js :D'},
           });
 
@@ -138,7 +138,7 @@ describe('TempMail', () => {
 
 
     it('should throw err if cant retrieve email inbox if mail and password are incorrect', async () => {
-      axios.post.mockRejectedValueOnce(new Error());
+      axios.post.mockRejectedValue(new Error());
 
 
       try {
@@ -157,13 +157,13 @@ describe('TempMail', () => {
 
     it('should throw err if token is not valid when gettingMailInbox', async () => {
       axios.post
-          .mockReturnValueOnce({
+          .mockReturnValue({
             data: {
               token: 'GOAL',
             },
           });
 
-      axios.get.mockRejectedValueOnce(new Error());
+      axios.get.mockRejectedValue(new Error());
 
 
       try {
