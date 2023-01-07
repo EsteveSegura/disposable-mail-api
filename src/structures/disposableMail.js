@@ -42,7 +42,20 @@ class DisposableMail {
       password: this.password,
     });
 
-    const response = new InboxResponse({inbox: inbox['hydra:member']});
+    const getAllMailIds = inbox['hydra:member'].map((mail) => mail.id);
+    const currentInbox = [];
+
+    for (const mailId of getAllMailIds) {
+      const mail = await this.apiMailService.getMailById({
+        mail: this.mail,
+        password: this.password,
+        id: mailId,
+      });
+
+      currentInbox.push(mail);
+    }
+
+    const response = new InboxResponse({inbox: currentInbox});
     return response;
   };
 }

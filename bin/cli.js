@@ -34,7 +34,8 @@ function _displayMail(mail) {
   console.log(`---------------------------- NEW MAIL ----------------------------`);
   console.log(`>> From: ${mail.from.name} <${mail.from.address}>`);
   console.log(`>> Subject: ${mail.subject}`);
-  console.log(`>> Body: ${mail.intro}`);
+  console.log(`>> Intro: ${mail.intro}`);
+  console.log(`>> Body: ${mail.text}`);
 }
 
 function _banner() {

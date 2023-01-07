@@ -1,6 +1,6 @@
 {
   "name": "disposable-mail-api",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Generate multiple disposable mails",
   "main": "./src/index.js",
   "bin": {
@@ -9,7 +9,8 @@
   "scripts": {
     "pretest": "eslint .",
     "test": "jest --testPathPattern=/test/ --passWithNoTests",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "examples": "node ./example/index.js"
   },
   "repository": {
     "type": "git",
