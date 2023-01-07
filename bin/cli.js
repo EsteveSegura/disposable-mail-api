@@ -4,6 +4,8 @@ const yargs = require('yargs');
 const figlet = require('figlet');
 
 const {DisposableMail} = require('../src/index');
+const axios = require('axios');
+const {version} = require('../package.json');
 const mail = new DisposableMail();
 
 _banner();
@@ -15,6 +17,10 @@ const options = yargs
 
 
 (async () => {
+  const {data: {version: remoteVersion}} = await axios
+      .get('https://raw.githubusercontent.com/EsteveSegura/disposable-mail-api/main/package.json');
+  checkForUpdates(version, remoteVersion);
+
   const createMail = await mail.generate({username: options.username});
   console.log(`Mail created => ${createMail.address}`);
   console.log('Listening for mails...');
@@ -39,5 +45,11 @@ function _displayMail(mail) {
 }
 
 function _banner() {
-  figlet('Dispobsale Mail', {font: '3D Diagonal'}, (err, data) => console.log(data));
+  figlet('Disposable Mail', {font: '3D Diagonal'}, (err, data) => console.log(data));
+}
+
+function checkForUpdates(localVersion, remoteVersion) {
+  if (localVersion.toString() !== remoteVersion.toString()) {
+    console.log('New version available, please run:', '\x1b[31m', '\'npm i disposable-mail-api@latest -g\'', '\x1b[0m');
+  }
 }
