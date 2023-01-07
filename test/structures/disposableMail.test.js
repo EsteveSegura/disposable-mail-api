@@ -8,6 +8,7 @@ describe('DisposableMail', () => {
     apiMailServiceMock = {
       createMail: jest.fn(),
       getMailInbox: jest.fn(),
+      getMailById: jest.fn(),
     };
   });
 
@@ -37,10 +38,20 @@ describe('DisposableMail', () => {
             address: 'd0f11334fd10abedc6276e6677d8c3@karenkey.com',
             name: '',
           }],
+          id: '123123123123',
           subject: 'important mail',
           intro: 'Hey! you should checkout this awesome website! https://girlazo.com/',
         },
       ],
+    });
+    apiMailServiceMock.getMailById.mockReturnValue({
+      from: [{
+        address: 'd0f11334fd10abedc6276e6677d8c3@karenkey.com',
+        name: '',
+      }],
+      id: '123123123123',
+      subject: 'important mail',
+      text: 'Hey! you should checkout this awesome website! https://girlazo.com/',
     });
 
     const createdMail = await disposableMailInstance.generate({username: 'supermail', password: 'guardiasregladas'});
@@ -61,7 +72,8 @@ describe('DisposableMail', () => {
               name: '',
             },
           ],
-          intro: 'Hey! you should checkout this awesome website! https://girlazo.com/',
+          intro: 'Hey! you should checko...',
+          text: 'Hey! you should checkout this awesome website! https://girlazo.com/',
           subject: 'important mail',
         },
       ],

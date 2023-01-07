@@ -10,4 +10,3 @@ const mail = new DisposableMail();
     console.log('getInboxMail', getInboxMail);
   }, 7000);
 })();
-

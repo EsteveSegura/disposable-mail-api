@@ -46,6 +46,21 @@ class TemporalMailService {
     }
   }
 
+  async getMailById({mail, password, id}) {
+    try {
+      const {token} = await this._getMailToken({mail, password});
+      const response = await this.httpClient.get(`${this.BASE_API_URL}/messages/${id}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (err) {
+      throw new InvalidMailInboxRetreiveError(`Cant get ${id} mail.`);
+    }
+  }
+
   async _getMailToken({mail, password}) {
     try {
       const response = await this.httpClient.post(`${this.BASE_API_URL}/token`, {
