@@ -73,6 +73,7 @@ describe('DisposableMail', () => {
             },
           ],
           intro: 'Hey! you should checko...',
+          id: '123123123123',
           text: 'Hey! you should checkout this awesome website! https://girlazo.com/',
           subject: 'important mail',
         },
