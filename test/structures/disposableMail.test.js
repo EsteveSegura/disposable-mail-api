@@ -52,6 +52,7 @@ describe('DisposableMail', () => {
       id: '123123123123',
       subject: 'important mail',
       text: 'Hey! you should checkout this awesome website! https://girlazo.com/',
+      html: '<div>Hey! you should checkout this awesome website! https://girlazo.com/</div>',
     });
 
     const createdMail = await disposableMailInstance.generate({username: 'supermail', password: 'guardiasregladas'});
@@ -74,7 +75,7 @@ describe('DisposableMail', () => {
           ],
           intro: 'Hey! you should checko...',
           id: '123123123123',
-          text: 'Hey! you should checkout this awesome website! https://girlazo.com/',
+          text: '<div>Hey! you should checkout this awesome website! https://girlazo.com/</div>',
           subject: 'important mail',
         },
       ],
