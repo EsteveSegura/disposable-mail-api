@@ -13,8 +13,9 @@ _banner();
 const options = yargs
     .usage('Usage: -u <username>')
     .option('u', {alias: 'username', describe: 'Your username for mail creation', type: 'string', demandOption: true})
+    .option('html',
+        {describe: 'Displays mail with plain html', type: 'boolean', demandOption: false, default: false})
     .argv;
-
 
 (async () => {
   const {data: {version: remoteVersion}} = await axios
@@ -28,7 +29,7 @@ const options = yargs
 
   let counterMailsShowed = 0;
   setInterval(async () => {
-    const getInboxMail = await mail.inbox();
+    const getInboxMail = await mail.inbox({withHtml: options?.html});
     if (getInboxMail.mailInbox.length !== counterMailsShowed) {
       _displayMail(getInboxMail.mailInbox[0]);
       counterMailsShowed++;
@@ -45,7 +46,7 @@ function _displayMail(mail) {
 }
 
 function _banner() {
-  figlet('Disposable Mail', {font: '3D Diagonal'}, (err, data) => console.log(data));
+  figlet('Disposable Mail', {font: '3D Diagonal'}, (_, data) => console.log(data));
 }
 
 function checkForUpdates(localVersion, remoteVersion) {
