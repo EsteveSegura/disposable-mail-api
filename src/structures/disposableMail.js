@@ -55,7 +55,7 @@ class DisposableMail {
 
       currentInbox.push(mail);
     }
-    
+
     if (!withHtml) {
       const response = new InboxWithoutHtmlResponse({inbox: currentInbox});
       return response;
