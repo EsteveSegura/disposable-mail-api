@@ -1,5 +1,5 @@
-import { ynInKey } from '../utils/ynInKey';
-import { getVersions } from './getVersions';
+import {ynInKey} from '../utils/ynInKey';
+import {getVersions} from './getVersions';
 
 function newVersionBanner(currentVersion, latestVersion, string = null) {
   const strings = [
