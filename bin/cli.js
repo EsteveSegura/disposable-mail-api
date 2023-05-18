@@ -5,9 +5,7 @@ const figlet = require('figlet');
 
 const {DisposableMail} = require('../src/index');
 const {autoUpdateChecker} = require('../src/service/autoUpdateChecker');
-const mail = new DisposableMail();
 
-_banner();
 
 const options = yargs
     .usage('Usage: -u <username>')
@@ -17,21 +15,30 @@ const options = yargs
     .argv;
 
 (async () => {
-  autoUpdateChecker();
+  await autoUpdateChecker();
 
-  const createMail = await mail.generate({username: options.username});
-  console.log(`Mail created => ${createMail.address}`);
-  console.log('Listening for mails...');
+  const mail = new DisposableMail();
+
+  _banner();
+
+  try {
+    const createMail = await mail.generate({username: options.username});
+    console.log(`Mail created => ${createMail.address}`);
+    console.log('Listening for mails...');
 
 
-  let counterMailsShowed = 0;
-  setInterval(async () => {
-    const getInboxMail = await mail.inbox({withHtml: options?.html});
-    if (getInboxMail.mailInbox.length !== counterMailsShowed) {
-      _displayMail(getInboxMail.mailInbox[0]);
-      counterMailsShowed++;
-    }
-  }, 7000);
+    let counterMailsShowed = 0;
+    setInterval(async () => {
+      const getInboxMail = await mail.inbox({withHtml: options?.html});
+      if (getInboxMail.mailInbox.length !== counterMailsShowed) {
+        _displayMail(getInboxMail.mailInbox[0]);
+        counterMailsShowed++;
+      }
+    }, 7000);
+  } catch (error) {
+    console.error(`ERROR! ${error.message}`);
+    process.exit(1);
+  }
 })();
 
 function _displayMail(mail) {

@@ -1,5 +1,6 @@
 const {ynInKey} = require('../utils/ynInKey');
 const {getVersions} = require('./getVersions');
+const {name: PACKAGE_NAME} = require('../../package.json');
 
 function newVersionBanner(currentVersion, latestVersion, string = null) {
   const strings = [
@@ -22,9 +23,9 @@ function newVersionBanner(currentVersion, latestVersion, string = null) {
   );
 }
 
-function update(packageName) {
+function update() {
   const {execSync} = require('child_process');
-  const command = `npm i ${packageName}@latest -g`;
+  const command = `npm i ${PACKAGE_NAME}@latest -g`;
   console.log(`Running '${command}'...`);
   execSync(command, {stdio: 'inherit'});
   console.log('Done!');
@@ -33,13 +34,15 @@ function update(packageName) {
   process.exit(0);
 }
 
-function autoUpdateChecker() {
-  const {localVersion, latestVersion, packageName} = getVersions();
-  if (localVersion === latestVersion) return;
+async function autoUpdateChecker() {
+  try {
+    const {localVersion, latestVersion} = await getVersions();
+    if (localVersion === latestVersion) return;
 
-  newVersionBanner(localVersion, latestVersion);
+    newVersionBanner(localVersion, latestVersion);
 
-  ynInKey.ynInKey('Do you want to update now?').then(() => update(packageName)).catch(() => {});
+    await ynInKey('Do you want to update now?', false).then(() => update());
+  } catch (error) {}
 }
 
 module.exports ={autoUpdateChecker};
