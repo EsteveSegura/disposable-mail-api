@@ -1,6 +1,6 @@
 const {createInterface} = require('node:readline/promises');
 
-export async function ynInKey(questionPrompt = null, defaultAnswer = true, abortTime = 10_000, multiline = false) {
+async function ynInKey(questionPrompt = null, defaultAnswer = true, abortTime = 10_000, multiline = false) {
   const signal = AbortSignal.timeout(abortTime);
   const readline = createInterface({
     input: process.stdin,
@@ -34,3 +34,5 @@ export async function ynInKey(questionPrompt = null, defaultAnswer = true, abort
     });
   });
 }
+
+module.exports = {ynInKey};

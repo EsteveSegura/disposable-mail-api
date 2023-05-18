@@ -1,4 +1,4 @@
-export async function getVersions() {
+async function getVersions() {
   const {
     version: localVersion,
     name,
@@ -10,3 +10,6 @@ export async function getVersions() {
 
   return {localVersion, latestVersion, packageName: name};
 }
+
+
+module.exports = {getVersions};

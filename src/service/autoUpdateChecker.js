@@ -1,5 +1,5 @@
-import {ynInKey} from '../utils/ynInKey';
-import {getVersions} from './getVersions';
+const {ynInKey} = require('../utils/ynInKey');
+const {getVersions} = require('./getVersions');
 
 function newVersionBanner(currentVersion, latestVersion, string = null) {
   const strings = [
@@ -33,11 +33,13 @@ function update(packageName) {
   process.exit(0);
 }
 
-export function autoUpdateChecker() {
+function autoUpdateChecker() {
   const {localVersion, latestVersion, packageName} = getVersions();
   if (localVersion === latestVersion) return;
 
   newVersionBanner(localVersion, latestVersion);
 
-  ynInKey('Do you want to update now?').then(() => update(packageName)).catch(() => {});
+  ynInKey.ynInKey('Do you want to update now?').then(() => update(packageName)).catch(() => {});
 }
+
+module.exports ={autoUpdateChecker};
