@@ -1,6 +1,7 @@
 const {randomString} = require('../utils/randomString');
 
 const InboxResponse = require('../responses/InboxResponse');
+const InboxWithoutHtmlResponse = require('../responses/InboxWithoutHtmlResponse');
 const GenerateResponse = require('../responses/GenerateResponse');
 
 class DisposableMail {
@@ -36,7 +37,7 @@ class DisposableMail {
     return response;
   }
 
-  async inbox() {
+  async inbox({withHtml = true}) {
     const inbox = await this.apiMailService.getMailInbox({
       mail: this.mail,
       password: this.password,
@@ -53,6 +54,11 @@ class DisposableMail {
       });
 
       currentInbox.push(mail);
+    }
+
+    if (!withHtml) {
+      const response = new InboxWithoutHtmlResponse({inbox: currentInbox});
+      return response;
     }
 
     const response = new InboxResponse({inbox: currentInbox});

@@ -1,6 +1,6 @@
 {
   "name": "disposable-mail-api",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "Generate multiple disposable mails",
   "main": "./src/index.js",
   "bin": {
@@ -52,6 +52,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "figlet": "^1.5.2",
+    "string-strip-html": "^8.4.0",
     "yargs": "^17.6.2"
   },
   "devDependencies": {
