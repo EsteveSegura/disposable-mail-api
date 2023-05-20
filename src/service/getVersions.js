@@ -1,4 +1,4 @@
-const {version: LOCAL_VERSION} = require('../../package.json');
+const {version: LOCAL_VERSION, name} = require('../../package.json');
 
 async function getVersions() {
   const npmRegistryUrlForThisPackage = `https://registry.npmjs.org/${name}/latest`;
