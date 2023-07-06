@@ -53,3 +53,6 @@ Listening for mails...
 >> Intro: You know.... im not John Doe, im J...
 >> Body: You know.... im not John Doe, im Jonh Doe!
 ```
+
+### TODO :
+[ ] Current release candidate is not published due to Major SemVer increase required. Must apply downgrade to allow this package to work with node 14.x, if not possible, rollback changes to previous states
