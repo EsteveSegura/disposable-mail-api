@@ -2,16 +2,18 @@
 
 const yargs = require('yargs');
 const figlet = require('figlet');
-const { stdout } = require('process');
+const {stdout} = require('process');
 
 const {DisposableMail} = require('../src/index');
 const {autoUpdateChecker} = require('../src/service/autoUpdateChecker');
 
+const TIME_TO_REFRESH_RECOMMENDED = 10000;
 
 const options = yargs
     .usage('Usage: -u <username>')
     .option('u', {alias: 'username', describe: 'Your username for mail creation', type: 'string', demandOption: true})
-    .option('t', {alias: 'timeToRefresh', describe: 'Time to refresh inbox', type: 'number', demandOption: false, default: 20000})
+    .option('t', {alias: 'timeToRefresh',
+      describe: 'Time to refresh inbox', type: 'number', demandOption: false, default: 20000})
     .option('html',
         {describe: 'Displays mail with plain html', type: 'boolean', demandOption: false, default: false})
     .argv;
@@ -24,7 +26,8 @@ const options = yargs
   _banner();
 
   try {
-    if(!options?.t < 10000) { 
+    console.log('time to refresh ', options?.t);
+    if (parseInt(options?.t) <= TIME_TO_REFRESH_RECOMMENDED) {
       _warningeMessage('The refresh time is too low, the recommended is 10000ms');
     }
 
@@ -61,8 +64,8 @@ function _banner() {
 }
 
 function _getTerminalSize() {
-  const { columns, rows } = stdout;
-  return{ columns, rows };
+  const {columns, rows} = stdout;
+  return {columns, rows};
 }
 
 function _warningeMessage(message) {
