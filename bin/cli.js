@@ -10,6 +10,7 @@ const {autoUpdateChecker} = require('../src/service/autoUpdateChecker');
 const options = yargs
     .usage('Usage: -u <username>')
     .option('u', {alias: 'username', describe: 'Your username for mail creation', type: 'string', demandOption: true})
+    .option('t', {alias: 'timeToRefresh', describe: 'Time to refresh inbox', type: 'number', demandOption: false, default: 20000})
     .option('html',
         {describe: 'Displays mail with plain html', type: 'boolean', demandOption: false, default: false})
     .argv;
@@ -22,6 +23,10 @@ const options = yargs
   _banner();
 
   try {
+    if(!options?.t < 10000) { 
+      _warningeMessage('The refresh time is too low, the recommended is 10000ms');
+    }
+
     const createMail = await mail.generate({username: options.username});
     console.log(`Mail created => ${createMail.address}`);
     console.log('Listening for mails...');
@@ -34,7 +39,7 @@ const options = yargs
         _displayMail(getInboxMail.mailInbox[0]);
         counterMailsShowed++;
       }
-    }, 7000);
+    }, options?.t);
   } catch (error) {
     console.error(`ERROR! ${error.message}`);
     process.exit(1);
@@ -51,5 +56,12 @@ function _displayMail(mail) {
 
 function _banner() {
   figlet('Disposable Mail', {font: '3D Diagonal'}, (_, data) => console.log(data));
+}
+
+function _warningeMessage(message) {
+  const redColor = '\u001b[31m';
+  const resetTerminalColors = '\u001b[0m';
+
+  console.log(`${redColor}${message}${resetTerminalColors}`);
 }
 
