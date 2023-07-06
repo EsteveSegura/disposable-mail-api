@@ -2,6 +2,7 @@
 
 const yargs = require('yargs');
 const figlet = require('figlet');
+const { stdout } = require('process');
 
 const {DisposableMail} = require('../src/index');
 const {autoUpdateChecker} = require('../src/service/autoUpdateChecker');
@@ -50,6 +51,12 @@ function _displayMail(mail) {
 }
 
 function _banner() {
-  figlet('Disposable Mail', {font: '3D Diagonal'}, (_, data) => console.log(data));
+  const {columns} = _getTerminalSize();
+  figlet('Disposable Mail', {font: '3D Diagonal', width: columns}, (_, data) => console.log(data));
+}
+
+function _getTerminalSize() {
+  const { columns, rows } = stdout;
+  return{ columns, rows };
 }
 
